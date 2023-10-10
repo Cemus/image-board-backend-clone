@@ -106,7 +106,7 @@ const createReply = async (req, res) => {
   if (req.file) {
     console.log("req file");
     console.log(req.file);
-    let imageKey = req.file.key;
+    imageKey = req.file.key;
     // Télécharger l'image depuis S3
     const imageBuffer = await downloadImageFromS3(imageKey);
     const isValidImage = await validateImageType(imageBuffer);
