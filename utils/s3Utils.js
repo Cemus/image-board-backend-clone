@@ -86,8 +86,6 @@ const downloadImageFromS3 = async (imageKey) => {
   try {
     const response = await s3.send(new GetObjectCommand(params));
     const buffer = await streamToBuffer(response.Body);
-    console.log("Image Data:", buffer.toString("utf-8")); // Ajout de cette ligne
-
     return buffer;
   } catch (error) {
     console.error(
