@@ -24,18 +24,16 @@ const uploadMulter = multer({
 
 const deleteObjects = async () => {
   try {
-    // Liste tous les objets dans le bucket
+    // Liste des objets
     const data = await s3.send(new ListObjectsCommand({ Bucket: bucketName }));
 
-    // Supprime chaque objet individuellement
+    // Suppression
     for (const content of data.Contents) {
       const deleteObjectParams = {
         Bucket: bucketName,
         Key: content.Key,
       };
-
       await s3.send(new DeleteObjectCommand(deleteObjectParams));
-
       console.log(`Objet ${content.Key} supprimé.`);
     }
 

@@ -10,11 +10,13 @@ import {
 } from "../controllers/threadController.js";
 
 const router = Router();
+
 // GET every threads
 router.get("/", getThreads);
 
 // GET images
 router.get("/images/:imageKey", getImages);
+
 // GET one thread
 router.get("/:id", getSingleThread);
 

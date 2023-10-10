@@ -21,12 +21,12 @@ const getThreads = async (req, res) => {
 const getSingleThread = async (req, res) => {
   const { id } = req.params;
   if (!Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "No such thread" });
+    return res.status(404).json({ error: "l'ID ne renvoie à aucun thread" });
   }
   const thread = await Thread.findById(id).populate("replies");
 
   if (!thread) {
-    return res.status(404).json({ error: "No such thread" });
+    return res.status(404).json({ error: "Pas de thread trouvé." });
   }
 
   res.status(200).json(thread);
@@ -44,24 +44,24 @@ const getImages = async (req, res) => {
     res.send(imageBuffer);
   } catch (error) {
     console.error("Erreur lors de la récupération de l'image :", error);
-    res.status(500).json({ error: "Internal Server Error" });
+    res.status(500).json({ error: "Erreur serveur" });
   }
 };
 
 //POST a thread
 const createThread = async (req, res) => {
   if (!req.file) {
-    return res.status(400).json({ error: "No file has been downloaded." });
+    return res.status(400).json({ error: "Rien n'a été téléchargé" });
   }
   const imageKey = req.file.key;
   // Télécharger l'image depuis S3
   const imageBuffer = await downloadImageFromS3(imageKey);
 
-  // Valider le type d'image
+  // Valider l'image
   const isValidImage = await validateImageType(imageBuffer);
   if (!isValidImage) {
     console.error(result.error);
-    return res.status(400).json({ error: "Invalid file format." });
+    return res.status(400).json({ error: "Fichier au format invalide" });
   }
   const metadata = await getImageMetadata(imageBuffer);
   const { width, height } = metadata;
@@ -109,10 +109,11 @@ const createReply = async (req, res) => {
     imageKey = req.file.key;
     // Télécharger l'image depuis S3
     const imageBuffer = await downloadImageFromS3(imageKey);
+    // Valider l'image
     const isValidImage = await validateImageType(imageBuffer);
     if (!isValidImage) {
       console.error(result.error);
-      return res.status(400).json({ error: "Invalid file format." });
+      return res.status(400).json({ error: "Fichier au format invalide" });
     }
     const metadata = await getImageMetadata(imageBuffer);
     width = metadata.width;
@@ -122,7 +123,7 @@ const createReply = async (req, res) => {
   // Test ID
   const { id } = req.params;
   if (!Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "bad ID" });
+    return res.status(404).json({ error: "Mauvaise ID" });
   }
   //Creation de la réponse
   const { name, comment } = req.body;
@@ -143,7 +144,7 @@ const createReply = async (req, res) => {
   //Le thread
   const thread = await Thread.findById(id);
   if (!thread) {
-    return res.status(404).json({ error: "No such thread" });
+    return res.status(404).json({ error: "Thread non trouvé" });
   }
   //La reponse est-elle une réponse à quelqu'un ?
   try {
@@ -164,7 +165,7 @@ const createReply = async (req, res) => {
           parentReply.directReplies.push(newReply.formatedId);
           await parentReply.save();
         } else {
-          console.log(`No comment found : ${match}`);
+          console.log(`Pas de commentaire lié à : ${match}`);
         }
       }
     }
