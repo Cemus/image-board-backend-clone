@@ -35,7 +35,6 @@ const getSingleThread = async (req, res) => {
 //GET images
 const getImages = async (req, res) => {
   try {
-    console.log(req);
     const imageKey = req.params.imageKey;
     // Utilisez cette clé pour récupérer l'image depuis S3
     const imageBuffer = await downloadImageFromS3(imageKey);
