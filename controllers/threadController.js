@@ -43,6 +43,7 @@ const getImages = async (req, res) => {
       const json = JSON.parse(data);
       console.log("json :");
       console.log(json);
+      res.status(200).json(json);
     });
   });
 };
