@@ -34,16 +34,12 @@ const getSingleThread = async (req, res) => {
 
 //GET images
 const getImages = async (req, res) => {
-  console.log("get images");
   try {
-    console.log("try");
     console.log(req);
     const imageKey = req.params.imageKey;
     // Utilisez cette clé pour récupérer l'image depuis S3
     const imageBuffer = await downloadImageFromS3(imageKey);
     const mimeType = await getMimeType(imageBuffer);
-    console.log("mimetype");
-    console.log(mimeType);
     // Envoyez l'image au client
     res.setHeader("Content-Type", mimeType); // Assurez-vous que le type de contenu est correct
     res.send(imageBuffer);
@@ -104,17 +100,19 @@ const createThread = async (req, res) => {
 // PATCH reply
 const createReply = async (req, res) => {
   //Image
-  let imagePath = null;
+  let imageKey = null;
   let width = 0;
   let height = 0;
   if (req.file) {
-    imagePath = req.file.path;
-    const result = await validateImageType(imagePath);
-    if (!result.ok) {
+    let imageKey = req.file.key;
+    // Télécharger l'image depuis S3
+    const imageBuffer = await downloadImageFromS3(imageKey);
+    const isValidImage = await validateImageType(imageBuffer);
+    if (!isValidImage) {
       console.error(result.error);
       return res.status(400).json({ error: "Invalid file format." });
     }
-    const metadata = await getImageMetadata(imagePath);
+    const metadata = await getImageMetadata(imageBuffer);
     width = metadata.width;
     height = metadata.height;
   }
@@ -129,7 +127,7 @@ const createReply = async (req, res) => {
   const newReply = await Reply.create({
     name,
     comment,
-    image: imagePath,
+    image: imageKey,
     imageWidth: width,
     imageHeight: height,
     imageSize: Math.floor(size / 1000),
