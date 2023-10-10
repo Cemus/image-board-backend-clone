@@ -4,7 +4,7 @@ import uniqueIdGeneration from "../utils/uniqueIdGeneration.js";
 import { Types } from "mongoose";
 import { Thread, Reply } from "../models/threadModel.js";
 import "dotenv/config";
-const fs = require("@cyclic.sh/s3fs")(S3_BUCKET_NAME);
+import fs from "@cyclic.sh/s3fs";
 import { downloadImageFromS3, getImageUrl } from "../utils/s3Utils.js";
 
 // GET every threads
