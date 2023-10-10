@@ -115,7 +115,7 @@ const createReply = async (req, res) => {
     width = metadata.width;
     height = metadata.height;
   }
-  size = req.file ? req.file.size : 0;
+  const size = req.file ? req.file.size : 0;
   // Test ID
   const { id } = req.params;
   if (!Types.ObjectId.isValid(id)) {
