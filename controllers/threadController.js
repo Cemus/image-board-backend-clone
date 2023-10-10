@@ -5,8 +5,8 @@ import uniqueIdGeneration from "../utils/uniqueIdGeneration.js";
 import { Types } from "mongoose";
 import { Thread, Reply } from "../models/threadModel.js";
 import "dotenv/config";
-import fs from "@cyclic.sh/s3fs";
-import { downloadImageFromS3, getImageUrl } from "../utils/s3Utils.js";
+
+import { downloadImageFromS3 } from "../utils/s3Utils.js";
 
 // GET every threads
 const getThreads = async (req, res) => {
@@ -54,7 +54,6 @@ const createThread = async (req, res) => {
     return res.status(400).json({ error: "No file has been downloaded." });
   }
   const imageKey = req.file.key;
-  console.log(req.file);
   // Télécharger l'image depuis S3
   const imageBuffer = await downloadImageFromS3(imageKey);
 

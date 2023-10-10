@@ -97,11 +97,6 @@ const downloadImageFromS3 = async (imageKey) => {
   }
 };
 
-function getImageUrl(imageKey) {
-  const imageUrl = `${bucketName}/${imageKey}`;
-  return imageUrl;
-}
-
 export {
   deleteObjects,
   listObjects,
