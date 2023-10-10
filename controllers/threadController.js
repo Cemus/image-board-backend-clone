@@ -1,4 +1,4 @@
-import { validateImageType, getImageType } from "../utils/validateImageType.js";
+import { validateImageType, getMimeType } from "../utils/validateImageType.js";
 import getImageMetadata from "../utils/getImageMetadata.js";
 import uniqueIdGeneration from "../utils/uniqueIdGeneration.js";
 import { Types } from "mongoose";
@@ -46,12 +46,16 @@ const getImages = async (req, res) => {
 
     // Obtenez l'URL ou la clé de l'image depuis le modèle du fil de discussion
     const imageKey = thread.image;
+    console.log("thread image");
+    console.log(thread.image);
 
     // Utilisez cette clé pour récupérer l'image depuis S3
     const imageBuffer = await downloadImageFromS3(imageKey);
-
+    const mimeType = await getMimeType(imageBuffer);
+    console.log("mimetype");
+    console.log(mimeType);
     // Envoyez l'image au client
-    res.setHeader("Content-Type", "image/png"); // Assurez-vous que le type de contenu est correct
+    res.setHeader("Content-Type", mimeType); // Assurez-vous que le type de contenu est correct
     res.send(imageBuffer);
   } catch (error) {
     console.error("Erreur lors de la récupération de l'image :", error);
