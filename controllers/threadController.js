@@ -38,8 +38,6 @@ const createThread = async (req, res) => {
   }
   const imageKey = req.file.key;
   console.log(req.file);
-  console.log("location");
-  console.log(req.file.location);
   // Télécharger l'image depuis S3
   const imageBuffer = await downloadImageFromS3(imageKey);
 
@@ -51,7 +49,7 @@ const createThread = async (req, res) => {
   }
   const metadata = await getImageMetadata(imageBuffer);
   const { width, height } = metadata;
-  fs.readFile(req.file.location, (error, data) => {
+  fs.readFile(imageKey, (error, data) => {
     if (error) {
       console.error("Erreur lors de la lecture du fichier :", error);
       return;
