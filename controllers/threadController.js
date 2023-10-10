@@ -33,19 +33,30 @@ const getSingleThread = async (req, res) => {
 
 //GET images
 const getImages = async (req, res) => {
-  Thread.forEach((thread) => {
-    fs.readFile(thread.image, (error, data) => {
-      if (error) {
-        console.error("Erreur lors de la lecture du fichier :", error);
-        return;
-      }
-      console.log(data);
-      const json = JSON.parse(data);
-      console.log("json :");
-      console.log(json);
-      res.status(200).json(json);
-    });
-  });
+  try {
+    // Récupérez l'ID du fil de discussion depuis les paramètres de la requête
+    const threadId = req.params.threadId;
+
+    // Recherchez le fil de discussion dans la base de données
+    const thread = await Thread.findById(threadId);
+
+    if (!thread) {
+      return res.status(404).json({ error: "Thread not found" });
+    }
+
+    // Obtenez l'URL ou la clé de l'image depuis le modèle du fil de discussion
+    const imageKey = thread.image;
+
+    // Utilisez cette clé pour récupérer l'image depuis S3
+    const imageBuffer = await downloadImageFromS3(imageKey);
+
+    // Envoyez l'image au client
+    res.setHeader("Content-Type", "image/png"); // Assurez-vous que le type de contenu est correct
+    res.send(imageBuffer);
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'image :", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
 };
 
 //POST a thread
