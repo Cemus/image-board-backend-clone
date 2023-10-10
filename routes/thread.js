@@ -1,8 +1,6 @@
 import { Router } from "express";
 import "dotenv/config";
 import { deleteObjects, listObjects, uploadMulter } from "../utils/s3Utils.js";
-
-const router = Router();
 import {
   getImages,
   getThreads,
@@ -11,13 +9,12 @@ import {
   createReply,
 } from "../controllers/threadController.js";
 
-listObjects();
-
+const router = Router();
 // GET every threads
 router.get("/", getThreads);
 
 // GET images
-router.get("/images/:imageKey", getImages);
+router.get("/images/:id", getImages);
 // GET one thread
 router.get("/:id", getSingleThread);
 
