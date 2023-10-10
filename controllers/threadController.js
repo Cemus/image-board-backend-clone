@@ -60,15 +60,12 @@ const createThread = async (req, res) => {
     });
     const { opName, subject, comment } = req.body;
     const { size } = req.file;
-    const imageData = JSON.parse(imageBuffer.toString("utf-8"));
-    const imageUrl = imageData.url;
-    console.log("url :");
-    console.log(imageUrl);
+
     const thread = await Thread.create({
       opName,
       subject,
       comment,
-      image: imageUrl,
+      image: imageKey,
       imageWidth: width,
       imageHeight: height,
       imageSize: Math.floor(size / 1000),
