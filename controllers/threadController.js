@@ -51,7 +51,7 @@ const createThread = async (req, res) => {
   }
   const metadata = await getImageMetadata(imageBuffer);
   const { width, height } = metadata;
-  fs.readFile(imageKey, (error, data) => {
+  fs.readFile(req.file.location, (error, data) => {
     if (error) {
       console.error("Erreur lors de la lecture du fichier :", error);
       return;
