@@ -13,7 +13,7 @@ const uploadMulter = multer({
   storage: multerS3({
     s3: s3,
     bucket: bucketName,
-    acl: "public-read", // Ajoutez cette ligne pour rendre le fichier public
+
     metadata: function (req, file, cb) {
       cb(null, { fieldName: file.fieldname });
     },
