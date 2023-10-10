@@ -1,4 +1,3 @@
-import "aws-sdk";
 import {
   ListObjectsCommand,
   DeleteObjectCommand,
@@ -6,8 +5,7 @@ import {
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
 const bucketName = process.env.CYCLIC_BUCKET_NAME;
-import AWS from "aws-sdk";
-const s3 = new AWS.S3();
+const s3 = new S3Client();
 
 import multer from "multer";
 import multerS3 from "multer-s3";
