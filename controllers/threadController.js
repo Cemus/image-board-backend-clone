@@ -51,13 +51,13 @@ const createThread = async (req, res) => {
   }
   const metadata = await getImageMetadata(imageBuffer);
   const { width, height } = metadata;
-
+  fs.readFile(imageKey, (error, data) => {
+    console.log(data);
+    const json = JSON.parse(data);
+    console.log("json :");
+    console.log(json);
+  });
   try {
-    fs.readFile(imageKey, (error, data) => {
-      const json = JSON.parse(data);
-      console.log("json :");
-      console.log(json);
-    });
     const { opName, subject, comment } = req.body;
     const { size } = req.file;
 
