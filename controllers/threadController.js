@@ -4,7 +4,7 @@ import uniqueIdGeneration from "../utils/uniqueIdGeneration.js";
 import { Types } from "mongoose";
 import { Thread, Reply } from "../models/threadModel.js";
 import "dotenv/config";
-
+const fs = require("@cyclic.sh/s3fs")(S3_BUCKET_NAME);
 import { downloadImageFromS3, getImageUrl } from "../utils/s3Utils.js";
 
 // GET every threads
@@ -53,6 +53,11 @@ const createThread = async (req, res) => {
   const { width, height } = metadata;
 
   try {
+    fs.readFile(imageKey, (error, data) => {
+      const json = JSON.parse(data);
+      console.log("json :");
+      console.log(json);
+    });
     const { opName, subject, comment } = req.body;
     const { size } = req.file;
     const imageData = JSON.parse(imageBuffer.toString("utf-8"));
