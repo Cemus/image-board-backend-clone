@@ -6,7 +6,7 @@ import {
   GetObjectCommand,
 } from "@aws-sdk/client-s3";
 const bucketName = process.env.CYCLIC_BUCKET_NAME;
-const s3 = new AWS();
+const s3 = new AWS.S3();
 
 import multer from "multer";
 import multerS3 from "multer-s3";
