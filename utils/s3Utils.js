@@ -54,7 +54,7 @@ const listObjects = async () => {
     const data = await s3.send(command);
     console.log("Objets dans le bucket:");
     data.Contents.forEach((object) => {
-      /*       console.log(object.Key); */
+      console.log(object.Key);
     });
   } catch (error) {
     console.error(error);
