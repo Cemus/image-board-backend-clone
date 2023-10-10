@@ -55,14 +55,17 @@ const createThread = async (req, res) => {
   try {
     const { opName, subject, comment } = req.body;
     const { size } = req.file;
-    const imageUrl = `${process.env.CYCLIC_BUCKET_NAME}${imageKey}`;
+    const imageData = JSON.parse(imageBuffer.toString("utf-8"));
+    const imageUrl = imageData.url;
+    console.log("imageData :");
+    console.log(imageData);
     console.log("url :");
     console.log(imageUrl);
     const thread = await Thread.create({
       opName,
       subject,
       comment,
-      image: dataUrl,
+      image: imageUrl,
       imageWidth: width,
       imageHeight: height,
       imageSize: Math.floor(size / 1000),
