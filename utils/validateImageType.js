@@ -10,6 +10,8 @@ const allowedMimeTypes = [
 
 async function getMimeType(imageBuffer) {
   const fileInfo = await fileTypeFromBuffer(imageBuffer);
+  console.log("mime");
+  console.log(fileInfo.mime);
   return fileInfo.mime;
 }
 
