@@ -49,14 +49,15 @@ const createThread = async (req, res) => {
     console.error(result.error);
     return res.status(400).json({ error: "Invalid file format." });
   }
+  const metadata = await getImageMetadata(imageBuffer);
+  const { width, height } = metadata;
+
   try {
-    const metadata = await getImageMetadata(imageBuffer);
-    const { width, height } = metadata;
     const { opName, subject, comment } = req.body;
     const { size } = req.file;
-    const dataUrl = `data:image/png;base64,${imageBuffer.toString("base64")}`;
+    const imageUrl = `${process.env.CYCLIC_BUCKET_NAME}${imageKey}`;
     console.log("url :");
-    console.log(dataUrl);
+    console.log(imageUrl);
     const thread = await Thread.create({
       opName,
       subject,
