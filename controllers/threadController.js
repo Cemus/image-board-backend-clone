@@ -101,7 +101,11 @@ const createReply = async (req, res) => {
   let imageKey = null;
   let width = 0;
   let height = 0;
+  console.log("req");
+  console.log(req);
   if (req.file) {
+    console.log("req file");
+    console.log(req.file);
     let imageKey = req.file.key;
     // Télécharger l'image depuis S3
     const imageBuffer = await downloadImageFromS3(imageKey);
