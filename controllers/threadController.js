@@ -77,6 +77,7 @@ const createThread = async (req, res) => {
     return res.status(400).json({ error: "Invalid file format." });
   }
   const metadata = await getImageMetadata(imageBuffer);
+  const dataUrl = `data:image/png;base64,${imageBuffer.toString("base64")}`;
   const { width, height } = metadata;
 
   try {
@@ -89,7 +90,7 @@ const createThread = async (req, res) => {
       opName,
       subject,
       comment,
-      image: imageUrl,
+      image: dataUrl,
       imageWidth: width,
       imageHeight: height,
       imageSize: Math.floor(size / 1000),
