@@ -4,6 +4,7 @@ import { deleteObjects, listObjects, uploadMulter } from "../utils/s3Utils.js";
 
 const router = Router();
 import {
+  getImages,
   getThreads,
   getSingleThread,
   createThread,
@@ -16,7 +17,7 @@ listObjects();
 router.get("/", getThreads);
 
 // GET images
-
+router.get("/", getImages);
 // GET one thread
 router.get("/:id", getSingleThread);
 

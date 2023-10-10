@@ -31,6 +31,22 @@ const getSingleThread = async (req, res) => {
   res.status(200).json(thread);
 };
 
+//GET images
+const getImages = async (req, res) => {
+  Thread.forEach((thread) => {
+    fs.readFile(thread.image, (error, data) => {
+      if (error) {
+        console.error("Erreur lors de la lecture du fichier :", error);
+        return;
+      }
+      console.log(data);
+      const json = JSON.parse(data);
+      console.log("json :");
+      console.log(json);
+    });
+  });
+};
+
 //POST a thread
 const createThread = async (req, res) => {
   if (!req.file) {
@@ -49,16 +65,7 @@ const createThread = async (req, res) => {
   }
   const metadata = await getImageMetadata(imageBuffer);
   const { width, height } = metadata;
-  fs.readFile(imageKey, (error, data) => {
-    if (error) {
-      console.error("Erreur lors de la lecture du fichier :", error);
-      return;
-    }
-    console.log(data);
-    const json = JSON.parse(data);
-    console.log("json :");
-    console.log(json);
-  });
+
   try {
     const { opName, subject, comment } = req.body;
     const { size } = req.file;
@@ -168,4 +175,4 @@ const createReply = async (req, res) => {
   }
 };
 
-export { getThreads, getSingleThread, createThread, createReply };
+export { getImages, getThreads, getSingleThread, createThread, createReply };
