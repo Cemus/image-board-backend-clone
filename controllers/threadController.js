@@ -31,33 +31,6 @@ const getSingleThread = async (req, res) => {
   res.status(200).json(thread);
 };
 
-//GET images
-const getImage = async (req, res) => {
-  const { id } = req.params;
-
-  try {
-    const thread = await Thread.findById(id);
-
-    if (!thread || !thread.image) {
-      return res.status(404).send("Thread or image not found");
-    }
-
-    const s3File = getS3Image(thread.image);
-    console.log("s3File :");
-    console.log(s3File);
-    res.set("Content-type", s3File.ContentType);
-    res.send(s3File.Body.toString()).end();
-  } catch (error) {
-    if (error.code === "NoSuchKey") {
-      console.log(`No such key ${filename}`);
-      res.sendStatus(404).end();
-    } else {
-      console.log(error);
-      res.sendStatus(500).end();
-    }
-  }
-};
-
 //POST a thread
 const createThread = async (req, res) => {
   if (!req.file) {
@@ -191,4 +164,4 @@ const createReply = async (req, res) => {
   }
 };
 
-export { getThreads, getSingleThread, createThread, createReply, getImage };
+export { getThreads, getSingleThread, createThread, createReply };
