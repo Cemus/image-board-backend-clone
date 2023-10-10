@@ -97,10 +97,4 @@ const downloadImageFromS3 = async (imageKey) => {
   }
 };
 
-export {
-  deleteObjects,
-  listObjects,
-  downloadImageFromS3,
-  uploadMulter,
-  getImageUrl,
-};
+export { deleteObjects, listObjects, downloadImageFromS3, uploadMulter };
