@@ -1,5 +1,6 @@
 import { validateImageType, getMimeType } from "../utils/validateImageType.js";
 import getImageMetadata from "../utils/getImageMetadata.js";
+import threadPurge from "../utils/threadPurge.js";
 import uniqueIdGeneration from "../utils/uniqueIdGeneration.js";
 import { Types } from "mongoose";
 import { Thread, Reply } from "../models/threadModel.js";
@@ -34,21 +35,7 @@ const getSingleThread = async (req, res) => {
 //GET images
 const getImages = async (req, res) => {
   try {
-    // Récupérez l'ID du fil de discussion depuis les paramètres de la requête
-    const threadId = req.params.threadId;
-
-    // Recherchez le fil de discussion dans la base de données
-    const thread = await Thread.findById(threadId);
-
-    if (!thread) {
-      return res.status(404).json({ error: "Thread not found" });
-    }
-
-    // Obtenez l'URL ou la clé de l'image depuis le modèle du fil de discussion
-    const imageKey = thread.image;
-    console.log("thread image");
-    console.log(thread.image);
-
+    const imageKey = req.params.imageKey;
     // Utilisez cette clé pour récupérer l'image depuis S3
     const imageBuffer = await downloadImageFromS3(imageKey);
     const mimeType = await getMimeType(imageBuffer);
@@ -101,11 +88,8 @@ const createThread = async (req, res) => {
     thread.formatedId = await uniqueIdGeneration();
     await thread.save();
 
-    const allThreads = await Thread.find({}).sort({ bumpDate: 1 });
-    const maxThreads = 16;
-    if (allThreads.length > maxThreads) {
-      await Thread.findByIdAndDelete(allThreads[0]._id);
-    }
+    //Supprime les vieux threads
+    await threadPurge();
 
     res.status(200).json(thread);
   } catch (error) {

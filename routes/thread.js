@@ -17,7 +17,7 @@ listObjects();
 router.get("/", getThreads);
 
 // GET images
-router.get("/", getImages);
+router.get("/:imageKey", getImages);
 // GET one thread
 router.get("/:id", getSingleThread);
 
