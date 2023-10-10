@@ -62,8 +62,6 @@ const createThread = async (req, res) => {
     const { size } = req.file;
     const imageData = JSON.parse(imageBuffer.toString("utf-8"));
     const imageUrl = imageData.url;
-    console.log("imageData :");
-    console.log(imageData);
     console.log("url :");
     console.log(imageUrl);
     const thread = await Thread.create({
